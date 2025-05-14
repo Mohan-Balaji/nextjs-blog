@@ -1,210 +1,179 @@
-'use client';
-import React, { useState } from 'react';
+"use client"
 import {
-  Navbar as NextUINavbar,
-  NavbarBrand,
-  NavbarContent,
-  NavbarItem,
-  NavbarMenu,
-  NavbarMenuItem,
-  NavbarMenuToggle,
-  Button,
-  Input,
-  Badge,
-  Avatar,
-  Dropdown,
-  DropdownTrigger,
-  DropdownMenu,
-  DropdownItem,
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@heroui/react';
-import { Icon } from '@iconify/react';
-import { AcmeIcon } from './AcmeIcon';
-import NotificationsCard from './NotificationsCard';
+  ClerkProvider,
+  SignedIn,
+  SignedOut,
+  SignInButton,
+  UserButton,
+} from "@clerk/nextjs";
+import React, { useState } from "react";
 
-export default function Navbar() {
-  const [activeApp, setActiveApp] = useState('TestFlight');
+const Navbar: React.FC = () => {
+  const [isNotificationsOpen, setIsNotificationsOpen] = useState<boolean>(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState<boolean>(false); // State for mobile menu toggle
+
+  const toggleNotifications = () => {
+    setIsNotificationsOpen(!isNotificationsOpen);
+  };
+
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen); // Toggle mobile menu state
+  };
 
   return (
-    <NextUINavbar
-      classNames={{
-        base: "bg-primary",
-        wrapper: "px-4 sm:px-6",
-        item: "data-[active=true]:text-primary",
-      }}
-      height="64px"
-      isBlurred={false} // This removes the white/blurred background
-    >
-      <NavbarBrand>
-        <NavbarMenuToggle className="mr-2 h-6 sm:hidden" />
-        <AcmeIcon />
-        <p className="font-bold text-inherit">ACME</p>
-      </NavbarBrand>
-
-      {/* Apps Navigation */}
-      <div className="hidden sm:flex items-center">
-        <Button
-          variant="light"
-          className={`text-primary-foreground/50 hover:text-primary-foreground ${
-            activeApp === 'iOS App' ? 'text-primary-foreground font-medium' : ''
-          }`}
-          onPress={() => setActiveApp('iOS App')}
-        >
-          iOS App
-        </Button>
-        <span className="mx-1 text-primary-foreground/50">/</span>
-        <Button
-          variant="light"
-          className={`text-primary-foreground/50 hover:text-primary-foreground ${
-            activeApp === 'TestFlight' ? 'text-primary-foreground font-medium' : ''
-          }`}
-          onPress={() => setActiveApp('TestFlight')}
-        >
-          TestFlight
-        </Button>
-        <span className="mx-1 text-primary-foreground/50">/</span>
-        <Button
-          variant="light"
-          className={`text-primary-foreground/50 hover:text-primary-foreground ${
-            activeApp === 'App' ? 'text-primary-foreground font-medium' : ''
-          }`}
-          onPress={() => setActiveApp('App')}
-        >
-          App
-        </Button>
-      </div>
-
-      <NavbarContent className="ml-auto h-12 max-w-fit items-center gap-8" justify="end">
-        {/* Search Bar - Removed white background */}
-        <NavbarItem className="hidden lg:flex">
-          <Input
-            aria-label="Search"
-            classNames={{
-              inputWrapper: "bg-transparent shadow-none hover:bg-primary-400/30 focus-within:!bg-primary-400/30",
-              input: "text-primary-foreground placeholder:text-primary-foreground/60",
-              innerWrapper: "bg-transparent"
-            }}
-            placeholder="Search..."
-            radius="full"
-            startContent={
-              <Icon
-                className="text-primary-foreground/60"
-                icon="solar:magnifer-linear"
-                width={20}
-              />
-            }
-          />
-        </NavbarItem>
-
-        {/* Mobile search */}
-        <NavbarItem className="lg:hidden">
-          <Button isIconOnly radius="full" variant="light">
-            <Icon
-              className="text-primary-foreground/60"
-              icon="solar:magnifer-linear"
-              width={20}
-            />
-          </Button>
-        </NavbarItem>
-
-        {/* Notifications - Removed white popover background */}
-        <NavbarItem>
-          <Popover 
-            offset={12} 
-            placement="bottom-end"
-            classNames={{
-              content: "bg-transparent shadow-none p-0"
-            }}
+    <ClerkProvider>
+      <nav className="bg-white border-gray-200 dark:bg-gray-900">
+        <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
+          <a
+            href="https://flowbite.com/"
+            className="flex items-center space-x-3 rtl:space-x-reverse"
           >
-            <PopoverTrigger>
-              <Button
-                isIconOnly
-                radius="full"
-                variant="light"
-              >
-                <Badge color="danger" content="5" showOutline={false} size="md">
-                  <Icon
-                    className="text-primary-foreground/60"
-                    icon="solar:bell-linear"
-                    width={22}
-                  />
-                </Badge>
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent>
-              <NotificationsCard className="bg-primary-500 border border-primary-400" />
-            </PopoverContent>
-          </Popover>
-        </NavbarItem>
-
-        {/* User Menu - 30px gap from notifications */}
-        <NavbarItem className="ml-[30px]">
-          <Dropdown placement="bottom-end">
-            <DropdownTrigger>
-              <Button isIconOnly variant="light" radius="full">
-                <Avatar 
-                  size="sm" 
-                  src="https://i.pravatar.cc/150?u=a04258114e29526708c"
-                  classNames={{
-                    base: "border-2 border-primary-foreground/20 hover:border-primary-foreground/40"
-                  }}
-                />
-              </Button>
-            </DropdownTrigger>
-            <DropdownMenu 
-              aria-label="Profile Actions" 
-              variant="faded"
-              classNames={{
-                base: "bg-primary-500 border border-primary-400"
-              }}
+            {/* <img
+              
+              className="h-8"
+              alt="blog Logo"
+            /> */}
+            <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">
+              NextJS Blog
+            </span>
+          </a>
+          <div className="flex items-center md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
+            {/* Notification Dropdown */}
+            <button
+              onClick={toggleNotifications}
+              className="relative p-2 rounded-full text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700"
             >
-              <DropdownItem key="profile" className="h-14 gap-2 bg-primary-400">
-                <p className="font-semibold text-primary-foreground">Signed in as</p>
-                <p className="font-semibold text-primary-foreground">johndoe@example.com</p>
-              </DropdownItem>
-              <DropdownItem key="settings" className="text-primary-foreground hover:bg-primary-400">
-                My Settings
-              </DropdownItem>
-              <DropdownItem key="logout" className="text-danger hover:bg-primary-400">
-                Log Out
-              </DropdownItem>
-            </DropdownMenu>
-          </Dropdown>
-        </NavbarItem>
-      </NavbarContent>
+              <svg
+                className="w-6 h-6"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M15 17h5l-1.405-1.405A8.962 8.962 0 0018 11V6a6 6 0 10-12 0v5a8.962 8.962 0 00-3.595 4.595L4 17h5m6 0v1a3 3 0 11-6 0v-1"
+                />
+              </svg>
+              {/* Notification dropdown */}
+              {isNotificationsOpen && (
+                <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-700 border rounded-lg shadow-md z-10">
+                  <ul className="py-2">
+                    <li className="px-4 py-2 text-sm text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600">
+                      New comment on your post
+                    </li>
+                    <li className="px-4 py-2 text-sm text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600">
+                      New like on your photo
+                    </li>
+                    <li className="px-4 py-2 text-sm text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600">
+                      New follower
+                    </li>
+                  </ul>
+                </div>
+              )}
+            </button>
 
-      {/* Mobile Menu */}
-      <NavbarMenu className="bg-primary-500">
-        <NavbarMenuItem>
-          <Button 
-            variant="light" 
-            className="w-full justify-start text-primary-foreground"
-            onPress={() => setActiveApp('iOS App')}
+            {/* Clerk UserButton (Visible when signed in) */}
+            <SignedIn>
+              <UserButton
+                afterSignOutUrl="/"
+                appearance={{
+                  elements: {
+                    userButtonAvatarBox: "w-40 h-40", // Increase avatar size
+                  },
+                }}
+              />
+            </SignedIn>
+
+            {/* SignInButton (Visible when signed out) */}
+            <SignedOut>
+              <SignInButton mode="modal">
+                <button className="text-sm bg-gray-800 text-white rounded-full p-2">
+                  Sign In
+                </button>
+              </SignInButton>
+            </SignedOut>
+
+            {/* Mobile menu toggle button */}
+            <button
+              onClick={toggleMobileMenu} // Toggle mobile menu
+              className="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+              aria-controls="navbar-user"
+              aria-expanded={isMobileMenuOpen ? "true" : "false"}
+            >
+              <span className="sr-only">Open main menu</span>
+              <svg
+                className="w-5 h-5"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 17 14"
+              >
+                <path
+                  stroke="currentColor"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M1 1h15M1 7h15M1 13h15"
+                />
+              </svg>
+            </button>
+          </div>
+          <div
+            className={`items-center justify-between ${isMobileMenuOpen ? "block" : "hidden"} w-full md:flex md:w-auto md:order-1`} // Toggle menu visibility
+            id="navbar-user"
           >
-            iOS App
-          </Button>
-        </NavbarMenuItem>
-        <NavbarMenuItem>
-          <Button 
-            variant="light" 
-            className="w-full justify-start text-primary-foreground"
-            onPress={() => setActiveApp('TestFlight')}
-          >
-            TestFlight
-          </Button>
-        </NavbarMenuItem>
-        <NavbarMenuItem>
-          <Button 
-            variant="light" 
-            className="w-full justify-start text-primary-foreground"
-            onPress={() => setActiveApp('App')}
-          >
-            App
-          </Button>
-        </NavbarMenuItem>
-      </NavbarMenu>
-    </NextUINavbar>
+            <ul className="flex flex-col font-medium p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
+              <li>
+                <a
+                  href="#"
+                  className="block py-2 px-3 text-white bg-blue-700 rounded-sm md:bg-transparent md:text-blue-700 md:p-0 md:dark:text-blue-500"
+                  aria-current="page"
+                >
+                  Home
+                </a>
+              </li>
+              <li>
+                <a
+                  href="#"
+                  className="block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
+                >
+                  About
+                </a>
+              </li>
+              <li>
+                <a
+                  href="#"
+                  className="block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
+                >
+                  Services
+                </a>
+              </li>
+              <li>
+                <a
+                  href="#"
+                  className="block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
+                >
+                  Pricing
+                </a>
+              </li>
+              <li>
+                <a
+                  href="#"
+                  className="block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
+                >
+                  Contact
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </ClerkProvider>
   );
-}
+};
+
+export default Navbar;
+
